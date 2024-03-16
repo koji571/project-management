@@ -31,6 +31,10 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'openai' => [
+        'key' => env('OPENAI_API_KEY'),
+    ],
+
     'github' => [
         'client_id' => env('GITHUB_ID'),
         'client_secret' => env('GITHUB_SECRET'),
