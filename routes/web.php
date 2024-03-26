@@ -3,7 +3,6 @@
 use App\Models\User;
 use App\Models\Ticket;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\GPTController;
 use App\Http\Controllers\RoadMap\DataController;
 use App\Http\Controllers\Auth\OidcAuthController;
 use App\Http\Controllers\BotMan\BotManController;
@@ -44,5 +43,3 @@ Route::match(['get', 'post'], '/botman',[BotManController::class,'handle']);
 Route::get('/botman-chat-frame', function () {
     return view('botman-chat-frame');
 })->name('botman.chatframe');
-
-Route::post('/test-gpt', [GPTController::class, 'testGPT'])->name('postTestGPT');
