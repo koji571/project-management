@@ -2,10 +2,11 @@
 
 namespace App\Filament\Pages;
 
+use Exception;
 use App\Models\Project;
 use Filament\Pages\Page;
-use App\Models\TicketStatus;
-use Filament\Resources\Form;
+use Livewire\Attributes\On;
+use App\Http\Services\GPTEngine;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
@@ -13,7 +14,7 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Concerns\InteractsWithForms;
 
-class RiskFinder extends Page implements HasForms
+class RiskFinder extends Page
 {
     use InteractsWithForms;
 
@@ -26,6 +27,10 @@ class RiskFinder extends Page implements HasForms
     public ?array $data = [];
     public $project_id;
     public $message = ''; // Default value for the message
+    public bool $waitingForResponse = false;
+    public string $prompt = '';
+    public string $reply = '';
+    public string $lastQuestion = '';
 
     protected static function getNavigationGroup(): ?string
     {
@@ -47,12 +52,12 @@ class RiskFinder extends Page implements HasForms
                                     $project = Project::find($state);
                                     if ($project) {
                                         //$this->message = "Project Selected: " . $project->name;
-                                        $prompt = (string)view('risk-finder.query',[
+                                        $this->prompt = (string)view('risk-finder.query',[
                                             'project_name' => $project->name,
                                             'project_description' => strip_tags($project->description),
                                             'project_tickets' => $project->tickets,
                                         ]);
-                                        $set('message', $prompt);
+                                        $set('message', $this->prompt);
                                     }
                                 })
                                 ->options(fn() => Project::where('owner_id', auth()->user()->id)
@@ -72,8 +77,26 @@ class RiskFinder extends Page implements HasForms
 
     public function create(): void
     {
+        $this->prompt = '';
+        $this->waitingForResponse = true;
         $message = $this->form->getState()['message'];
         $this->data['message'] = '';
+
+        $this->queryAI($message);
     }
 
+
+    public function queryAI($message)
+    {
+        info($message);
+        try {
+            $this->reply = (new GPTEngine())->ask($message);
+        } catch (Exception $e) {
+            info($e->getMessage());
+            $this->reply = 'Sorry, the AI assistant was unable to answer your question. Please try to rephrase your question.';
+            $this->data['message'] = $this->lastQuestion;
+        }
+        $this->lastQuestion = $message;
+        $this->waitingForResponse = false;
+    }
 }
