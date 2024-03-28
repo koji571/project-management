@@ -1,15 +1,11 @@
 <?php
 
-namespace App\Http\Services;
+namespace App\Http\Services\RiskFinder;
 
 use OpenAI;
 use Illuminate\Support\Str;
 
-/**
- * Code base taken from abandoned GitHub repo:
- * https://github.com/beyondcode/laravel-ask-database/tree/main
- */
-class GPTEngine
+class RiskFinderGPTService
 {
     protected string $connection;
     private $client;

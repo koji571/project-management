@@ -5,14 +5,12 @@ namespace App\Filament\Pages;
 use Exception;
 use App\Models\Project;
 use Filament\Pages\Page;
-use Livewire\Attributes\On;
-use App\Http\Services\GPTEngine;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Concerns\InteractsWithForms;
+use App\Http\Services\RiskFinder\RiskFinderGPTService;
 
 class RiskFinder extends Page
 {
@@ -51,7 +49,6 @@ class RiskFinder extends Page
                                 ->afterStateUpdated(function ($set, $state) {
                                     $project = Project::find($state);
                                     if ($project) {
-                                        //$this->message = "Project Selected: " . $project->name;
                                         $this->prompt = (string)view('risk-finder.query',[
                                             'project_name' => $project->name,
                                             'project_description' => strip_tags($project->description),
@@ -85,12 +82,10 @@ class RiskFinder extends Page
         $this->queryAI($message);
     }
 
-
     public function queryAI($message)
     {
-        info($message);
         try {
-            $this->reply = (new GPTEngine())->ask($message);
+            $this->reply = (new RiskFinderGPTService())->ask($message);
         } catch (Exception $e) {
             info($e->getMessage());
             $this->reply = 'Sorry, the AI assistant was unable to answer your question. Please try to rephrase your question.';
