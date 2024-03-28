@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Services;
+namespace App\Http\Services\Botman;
 
 use OpenAI;
 use stdClass;
@@ -13,7 +13,7 @@ use App\Exceptions\UnsafeQueryException;
  * Code base taken from abandoned GitHub repo:
  * https://github.com/beyondcode/laravel-ask-database/tree/main
  */
-class GPTEngine
+class BotmanGPTEngine
 {
     protected string $connection;
     private $client;

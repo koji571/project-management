@@ -3,7 +3,7 @@
 namespace App\Http\Conversations;
 
 use Exception;
-use App\Http\Services\GPTEngine;
+use App\Http\Services\Botman\BotmanGPTEngine;
 use Illuminate\Support\Facades\Log;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Conversations\Conversation;
@@ -11,6 +11,11 @@ use BotMan\BotMan\Messages\Conversations\Conversation;
 class DatabaseQueryConversation extends Conversation
 {
     protected $question;
+
+    public function run()
+    {
+        $this->askQuestion();
+    }
 
     public function askQuestion()
     {
@@ -22,7 +27,7 @@ class DatabaseQueryConversation extends Conversation
 
     protected function processQuestion()
     {
-        $engine = new GPTEngine();
+        $engine = new BotmanGPTEngine();
         try {
             $reply = $engine->ask($this->question);
             // Assuming $replyData is an array with 'type' and 'result'
@@ -33,15 +38,5 @@ class DatabaseQueryConversation extends Conversation
         $this->say($reply);
     }
 
-    protected function formatReply($result)
-    {
-        // More conditions based on type of replyData
-        return "Here's what I found: " . json_encode($result);
-    }
-
-    public function run()
-    {
-        $this->askQuestion();
-    }
 }
 
