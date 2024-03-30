@@ -3,40 +3,41 @@
 namespace App\Http\Conversations;
 
 use Exception;
-use App\Http\Services\Botman\BotmanGPTEngine;
-use Illuminate\Support\Facades\Log;
 use BotMan\BotMan\Messages\Incoming\Answer;
+use App\Http\Services\Botman\BotmanGPTEngine;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 
 class DatabaseQueryConversation extends Conversation
 {
-    protected $question;
+    protected $initialQuestion;
+
+    // Updating constructor to accept the initial question
+    public function __construct($initialQuestion)
+    {
+        $this->initialQuestion = $initialQuestion;
+    }
 
     public function run()
     {
-        $this->askQuestion();
+        // Use the initial question to ask the BotmanGPTEngine
+        $this->askBotmanGPTEngine($this->initialQuestion);
     }
 
-    public function askQuestion()
+    protected function askBotmanGPTEngine($question)
     {
-        $this->ask('What question do you have about the database?', function(Answer $answer) {
-            $this->question = $answer->getText();
-            $this->processQuestion();
-        });
-    }
-
-    protected function processQuestion()
-    {
+        // Instantiate the engine
         $engine = new BotmanGPTEngine();
-        try {
-            $reply = $engine->ask($this->question);
-            // Assuming $replyData is an array with 'type' and 'result'
-            //$reply = $this->formatReply($replyData);
-        } catch (Exception $e) {
-            $reply = 'Sorry, the AI assistant was unable to answer your question. Please try to rephrase your question.';
-        }
-        $this->say($reply);
-    }
 
+        try {
+            // Attempt to get an answer for the question
+            $reply = $engine->ask($question);
+            $this->say($reply);
+        } catch (Exception $e) {
+            info($e);
+            // Handle exceptions, such as inability to get a response
+            $this->say('Sorry, there was an error processing your question. Please try again.');
+        }
+    }
 }
+
 

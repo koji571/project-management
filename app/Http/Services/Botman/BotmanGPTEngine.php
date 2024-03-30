@@ -156,7 +156,6 @@ class BotmanGPTEngine
 
     protected function buildAnswerPrompt(string $question, string $query, string $result) :string
     {
-        info("in");
 
         $prompt = (string)view('ask-database.queryAnswer', [
             'question' => $question,

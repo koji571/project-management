@@ -12,9 +12,9 @@ class BotManController extends Controller {
     {
         $botman = app('botman');
 
-        $botman->hears('{command}', function (BotMan $bot) {
+        $botman->hears('{command}', function (BotMan $bot, $command) {
             // Trigger the conversation
-            $bot->startConversation(new DatabaseQueryConversation());
+            $bot->startConversation(new DatabaseQueryConversation($command));
         });
 
         $botman->listen();
