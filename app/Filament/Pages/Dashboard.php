@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages;
 
+use App\Filament\Widgets\BotManChatWidget;
 use App\Filament\Widgets\FavoriteProjects;
 use App\Filament\Widgets\LatestActivities;
 use App\Filament\Widgets\LatestComments;
@@ -33,7 +34,8 @@ class Dashboard extends BasePage
             TicketsByPriority::class,
             TicketsByType::class,
             TicketTimeLogged::class,
-            UserTimeLogged::class
+            UserTimeLogged::class,
+            BotManChatWidget::class
         ];
     }
 }

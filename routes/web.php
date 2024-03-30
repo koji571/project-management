@@ -3,9 +3,10 @@
 use App\Models\User;
 use App\Models\Ticket;
 use Illuminate\Support\Facades\Route;
-use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use App\Http\Controllers\RoadMap\DataController;
 use App\Http\Controllers\Auth\OidcAuthController;
+use App\Http\Controllers\BotMan\BotManController;
+use Filament\Http\Middleware\DispatchServingFilamentEvent;
 
 // Share ticket
 Route::get('/tickets/share/{ticket:code}', function (Ticket $ticket) {
@@ -36,3 +37,9 @@ Route::name('oidc.')
         Route::get('redirect', [OidcAuthController::class, 'redirect'])->name('redirect');
         Route::get('callback', [OidcAuthController::class, 'callback'])->name('callback');
     });
+
+Route::match(['get', 'post'], '/botman',[BotManController::class,'handle']);
+
+Route::get('/botman-chat-frame', function () {
+    return view('botman-chat-frame');
+})->name('botman.chatframe');
