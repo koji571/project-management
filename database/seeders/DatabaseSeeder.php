@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Risk;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -19,5 +20,7 @@ class DatabaseSeeder extends Seeder
         $this->call(TicketPrioritySeeder::class);
         $this->call(TicketStatusSeeder::class);
         $this->call(ActivitySeeder::class);
+        $this->call(RiskPrioritySeeder::class);
+        $this->call(RiskStatusSeeder::class);
     }
 }
