@@ -13,8 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('risks', function (Blueprint $table) {
+        Schema::create('risk_priorities', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('color')->default('#cecece');
+            $table->boolean('is_default')->default(false);
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -26,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('risks');
+        Schema::dropIfExists('risk_priorities');
     }
 };
