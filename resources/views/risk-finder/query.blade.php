@@ -5,4 +5,4 @@ The tickets for the project are
 "{!! $ticket->name !!}" and its description is "{!! strip_tags($ticket->content) !!}" and its current status is "{!! $ticket->status->name !!}"
 @endforeach
 
-Now determine possible risks thisp project might face knowing the project and its current tickets and their statuses
+Now determine possible risks this project might face knowing the project and its current tickets and their statuses
