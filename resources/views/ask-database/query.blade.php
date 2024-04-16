@@ -31,5 +31,5 @@ SQLResult: "@if($result){!! $result !!}"
 @if($query)
     Answer: "
 @else
-(Your answer HERE must be a syntactically correct MySQL query with no extra information or quotes. Omit SQLQuery: from your answer)
+(Your answer HERE must be a syntactically correct MySQL query with no extra information or quotes. If there is a 'deleted_at' column in this table, you must exclude any rows where the 'deleted_at' is not 'null' . Omit SQLQuery: from your answer)
 @endif
