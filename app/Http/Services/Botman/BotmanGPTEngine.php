@@ -28,7 +28,13 @@ class BotmanGPTEngine
     {
         $query = $this->getQuery($question);
 
-        $result = json_encode($this->evaluateQuery($query));
+        $results = $this->evaluateQuery($query);
+
+        // Convert results array to a formatted string, handling multiple rows
+        $result = json_encode(array_map(function ($item)
+        {
+            return (array)$item;
+        }, $results));
 
         $prompt = $this->buildAnswerPrompt($question, $query, $result);
 
@@ -64,8 +70,7 @@ class BotmanGPTEngine
                 ]
             ],
             'temperature' => $temperature,
-            'max_tokens' => 100,
-            'stop' => $stop,
+            'max_tokens' => 500,
         ]);
 
         return $completions->choices[0]->message->content;
@@ -86,9 +91,9 @@ class BotmanGPTEngine
         return rtrim($prompt, PHP_EOL);
     }
 
-    protected function evaluateQuery(string $query): object
+    protected function evaluateQuery(string $query): array
     {
-        return DB::connection($this->connection)->select($this->getRawQuery($query))[0] ?? new stdClass();
+        return DB::connection($this->connection)->select($this->getRawQuery($query));
     }
 
     protected function getRawQuery(string $query): string
