@@ -34,10 +34,9 @@ class RiskFinderGPTService
                 ]
             ],
             'temperature' => $temperature,
-            'max_tokens' => 100,
-            'stop' => $stop,
+            'max_tokens' => 2000
         ]);
-
+        info($completions->toArray());
         return $completions->choices[0]->message->content;
     }
 }
